@@ -2,57 +2,53 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Just a Moment</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Poppins:wght@300;400&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Just a Little More ❤️</title>
 
 <style>
 body{
-    margin:0;
-    height:100vh;
-    background:linear-gradient(135deg,#fbd3e9,#f8cdda);
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    font-family:'Poppins',sans-serif;
+  margin:0;
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:linear-gradient(135deg,#ffeaf3,#ffd6e8);
+  font-family:'Segoe UI',sans-serif;
 }
 
 .card{
-    background:white;
-    padding:50px;
-    border-radius:24px;
-    max-width:480px;
-    text-align:center;
-    box-shadow:0 20px 40px rgba(0,0,0,0.15);
-    animation:fadeUp 1.4s ease;
+  max-width:500px;
+  text-align:center;
+  background:white;
+  padding:40px;
+  border-radius:20px;
+  box-shadow:0 20px 40px rgba(0,0,0,0.2);
+  animation:fadeIn 1.5s ease;
 }
 
-h2{
-    font-family:'Playfair Display',serif;
-    color:#b23a48;
-    margin-bottom:20px;
+h1{
+  color:#b4005a;
 }
 
 p{
-    font-size:1.05rem;
-    color:#333;
-    line-height:1.8;
+  color:#7a003c;
+  font-size:18px;
 }
 
 button{
-    margin-top:30px;
-    padding:14px 38px;
-    border:none;
-    border-radius:30px;
-    background:#b23a48;
-    color:white;
-    font-size:1rem;
-    cursor:pointer;
+  margin-top:25px;
+  padding:12px 30px;
+  font-size:16px;
+  border:none;
+  border-radius:25px;
+  background:#ff5fa2;
+  color:white;
+  cursor:pointer;
 }
 
-@keyframes fadeUp{
-    from{opacity:0; transform:translateY(30px);}
-    to{opacity:1; transform:translateY(0);}
+@keyframes fadeIn{
+  from{opacity:0; transform:translateY(20px);}
+  to{opacity:1; transform:translateY(0);}
 }
 </style>
 </head>
@@ -60,23 +56,15 @@ button{
 <body>
 
 <div class="card">
-    <h2>Before you continue…</h2>
-    <p>
-        This isn’t random.  
-        It’s thoughtful — like the way you notice details others miss.
-    </p>
-    <button onclick="goNext()">Continue</button>
+  <h1>Almost There ❤️</h1>
+  <p>
+    Some people make the world brighter just by being in it.  
+    You are one of them.
+  </p>
+  <a href="countdown.html">
+    <button>Continue</button>
+  </a>
 </div>
-
-<script>
-function goNext(){
-    // Unlock audio permission
-    localStorage.setItem("playMusic","yes");
-
-    // Navigate to birthday page
-    window.location.href = "birthday.html";
-}
-</script>
 
 </body>
 </html>
