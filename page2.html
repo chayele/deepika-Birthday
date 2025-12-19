@@ -73,12 +73,21 @@ button{
 <script>
 function playAndGo(){
     const music = document.getElementById("bgMusic");
-    music.play();
-    setTimeout(() => {
+
+    // remember that user allowed music
+    localStorage.setItem("playMusic", "yes");
+
+    music.play().then(() => {
+        setTimeout(() => {
+            window.location.href = "birthday.html";
+        }, 800);
+    }).catch(err => {
         window.location.href = "birthday.html";
-    }, 800);
+    });
 }
 </script>
 
+
 </body>
 </html>
+
