@@ -7,9 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Poppins:wght@300;400&display=swap" rel="stylesheet">
 
 <style>
-*{
-    box-sizing:border-box;
-}
+*{ box-sizing:border-box; }
 
 body{
     margin:0;
@@ -22,7 +20,7 @@ body{
     overflow:hidden;
 }
 
-/* Main Card */
+/* Card */
 .card{
     background:rgba(255,255,255,0.96);
     padding:56px 62px;
@@ -96,66 +94,148 @@ footer{
     50%{transform:scale(1.12);}
     100%{transform:scale(1);}
 }
+
+/* Mute button */
+.mute{
+    position:fixed;
+    bottom:20px;
+    right:20px;
+    background:rgba(255,255,255,0.7);
+    border:none;
+    border-radius:50%;
+    padding:10px 14px;
+    font-size:14px;
+    cursor:pointer;
+    z-index:5;
+}
+
+/* Countdown */
+.countdown{
+    font-size:1.3rem;
+    color:#b23a48;
+    margin-top:15px;
+}
 </style>
 </head>
 
 <body>
 
-<div class="card">
-    <h1>Happy Birthday, Deepika</h1>
-    <div class="subtitle">To someone beautifully intentional</div>
-
-    <p>
-        You have a rare way of bringing clarity, elegance,  
-        and meaning into everything you touch.
-    </p>
-
-    <p>
-        Your standards aren’t about perfection —  
-        they’re about care, intention, and depth.
-    </p>
-
-    <p>
-        On your birthday, I hope life surprises you  
-        with moments as thoughtfully crafted as you are.
-    </p>
-
-    <div class="heart">❤️</div>
-
-    <footer>
-        — Always admiring you
-    </footer>
+<div class="card" id="card">
+    <!-- Content will be populated by JS based on date -->
 </div>
 
 <!-- Background Music -->
 <audio id="bgMusic" src="music.mp3" loop></audio>
 
+<button class="mute" onclick="toggleMusic()">🔇</button>
+
 <script>
-/* 🎵 PLAY MUSIC (after user permission from previous page) */
-window.addEventListener("load", () => {
-    const music = document.getElementById("bgMusic");
+const card = document.getElementById("card");
+const music = document.getElementById("bgMusic");
 
-    if (localStorage.getItem("playMusic") === "yes") {
+// Check date
+const today = new Date();
+const month = today.getMonth() + 1; // January = 0
+const day = today.getDate();
+const targetDate = new Date(today.getFullYear(), 5, 8); // June 8th (month = 5)
+
+// Function to show birthday wishes
+function showWishes(){
+    card.innerHTML = `
+        <h1>Happy Birthday, Deepika</h1>
+        <div class="subtitle">To someone beautifully intentional</div>
+
+        <p>
+            You bring elegance, clarity, and meaning  
+            into everything you touch.
+        </p>
+
+        <p>
+            Your standards aren’t about perfection —  
+            they’re about care.
+        </p>
+
+        <p>
+            Today, I hope life gives you moments  
+            as thoughtfully crafted as you are.
+        </p>
+
+        <div class="heart">❤️</div>
+
+        <footer>
+            — Always admiring you
+        </footer>
+    `;
+
+    // Play music if unlocked
+    if(localStorage.getItem("playMusic") === "yes"){
         music.volume = 0.6;
-        music.play().catch(() => {});
+        music.play().catch(()=>{});
     }
-});
 
-/* 🌹 CREATE SOFT FALLING ROSES */
-function createRose(){
-    const rose = document.createElement("div");
-    rose.classList.add("rose");
-    rose.innerText = "🌹";
-
-    rose.style.left = Math.random() * 100 + "vw";
-    rose.style.animationDuration = (7 + Math.random() * 6) + "s";
-
-    document.body.appendChild(rose);
-
-    setTimeout(() => rose.remove(), 13000);
+    // Start roses
+    setInterval(createRose, 900);
 }
 
-setInterval(createRose, 900);
+// Function to show countdown
+function showCountdown(){
+    card.innerHTML = `
+        <h1>Almost there!</h1>
+        <p>Deepika's birthday is on June 8th 🎉</p>
+        <div class="countdown" id="countdown"></div>
+        <p>Come back then for a special surprise ❤️</p>
+    `;
+
+    const countdownEl = document.getElementById("countdown");
+
+    function updateCountdown(){
+        const now = new Date();
+        let diff = targetDate - now;
+
+        if(diff <= 0){
+            showWishes();
+            clearInterval(interval);
+            return;
+        }
+
+        const days = Math.floor(diff / (1000*60*60*24));
+        const hours = Math.floor((diff%(1000*60*60*24))/(1000*60*60));
+        const minutes = Math.floor((diff%(1000*60*60))/(1000*60));
+        const seconds = Math.floor((diff%(1000*60))/1000);
+
+        countdownEl.innerText = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+    }
+
+    updateCountdown();
+    const interval = setInterval(updateCountdown, 1000);
+}
+
+// Roses function
+function createRose(){
+    const rose = document.createElement("div");
+    rose.className = "rose";
+    rose.textContent = "🌹";
+    rose.style.left = Math.random()*100 + "vw";
+    rose.style.animationDuration = (7+Math.random()*6) + "s";
+    document.body.appendChild(rose);
+    setTimeout(()=>rose.remove(), 13000);
+}
+
+// Mute button
+function toggleMusic(){
+    if(music.paused){
+        music.play();
+    }else{
+        music.pause();
+    }
+}
+
+// Decide what to show
+if(month === 6 && day === 8){
+    showWishes();
+}else{
+    showCountdown();
+}
 </script>
 
 </body>
