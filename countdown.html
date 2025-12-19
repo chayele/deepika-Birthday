@@ -1,97 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Happy Birthday Deepika ❤️</title>
-
-<style>
-body{
-  margin:0;
-  height:100vh;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  background:linear-gradient(135deg,#ffd6e8,#ffeaf3);
-  font-family:'Segoe UI',sans-serif;
-  overflow:hidden;
-}
-
-.hidden{ display:none; }
-
-.box{
-  text-align:center;
-  padding:30px;
-  animation:fadeIn 1.5s ease;
-}
-
-h1{
-  color:#b4005a;
-  font-size:40px;
-}
-
-#timer{
-  font-size:45px;
-  color:#7a003c;
-  margin-top:15px;
-}
-
-p{
-  font-size:20px;
-  color:#7a003c;
-}
-
-/* Roses */
-.rose{
-  position:absolute;
-  top:-50px;
-  font-size:30px;
-  animation:fall linear infinite;
-}
-
-@keyframes fall{
-  to{
-    transform:translateY(110vh) rotate(360deg);
-  }
-}
-
-@keyframes fadeIn{
-  from{opacity:0; transform:scale(0.9);}
-  to{opacity:1; transform:scale(1);}
-}
-</style>
-</head>
-
-<body>
-
-<!-- COUNTDOWN -->
-<div id="countdownBox" class="box">
-  <h1>Counting down to your day ❤️</h1>
-  <div id="timer">Loading...</div>
-</div>
-
-<!-- WISHES -->
-<div id="wishBox" class="box hidden">
-  <h1>Happy Birthday Deepika 🎉❤️</h1>
-  <p>
-    At midnight, the world celebrates you.  
-    Your perfection, grace, and smile make everything better.  
-    May this year bring you endless happiness 🌹
-  </p>
-</div>
-
-<!-- MUSIC -->
-<audio id="music" loop>
-  <source src="music.mp3" type="audio/mpeg">
-</audio>
-
 <script>
 const timerEl = document.getElementById("timer");
 const countdownBox = document.getElementById("countdownBox");
 const wishBox = document.getElementById("wishBox");
 const music = document.getElementById("music");
 
-const target = new Date(new Date().getFullYear(), 5, 8, 0, 0, 0); // June 8, 00:00
+// 🔧 FIXED TARGET DATE LOGIC
+const now = new Date();
+let year = now.getFullYear();
+
+// June = 5 (JS months start from 0)
+let target = new Date(year, 5, 8, 0, 0, 0);
+
+// If today is AFTER June 8, use NEXT year
+if (now >= target) {
+  target = new Date(year + 1, 5, 8, 0, 0, 0);
+}
+
+let interval = setInterval(updateTimer, 1000);
+updateTimer();
 
 function updateTimer(){
   const now = new Date();
@@ -111,11 +37,11 @@ function updateTimer(){
 }
 
 function showWishes(){
+  clearInterval(interval);
   countdownBox.classList.add("hidden");
   wishBox.classList.remove("hidden");
   music.play().catch(()=>{});
   startRoses();
-  clearInterval(interval);
 }
 
 function startRoses(){
@@ -128,10 +54,4 @@ function startRoses(){
     document.body.appendChild(r);
   }
 }
-
-updateTimer();
-const interval = setInterval(updateTimer, 1000);
 </script>
-
-</body>
-</html>
