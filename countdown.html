@@ -35,15 +35,15 @@ body{
 
 h1{
     font-family:'Playfair Display',serif;
-    font-size:2.75rem;
+    font-size:2.6rem;
     color:#b23a48;
-    margin-bottom:8px;
+    margin-bottom:12px;
 }
 
 .subtitle{
     font-size:0.95rem;
     color:#777;
-    margin-bottom:32px;
+    margin-bottom:30px;
     letter-spacing:1px;
 }
 
@@ -63,6 +63,14 @@ footer{
     margin-top:32px;
     font-size:0.9rem;
     color:#777;
+}
+
+/* Countdown */
+.countdown{
+    font-size:1.8rem;
+    font-weight:600;
+    color:#b23a48;
+    margin:18px 0;
 }
 
 /* Roses */
@@ -100,7 +108,7 @@ footer{
     position:fixed;
     bottom:20px;
     right:20px;
-    background:rgba(255,255,255,0.7);
+    background:rgba(255,255,255,0.75);
     border:none;
     border-radius:50%;
     padding:10px 14px;
@@ -108,21 +116,12 @@ footer{
     cursor:pointer;
     z-index:5;
 }
-
-/* Countdown */
-.countdown{
-    font-size:1.3rem;
-    color:#b23a48;
-    margin-top:15px;
-}
 </style>
 </head>
 
 <body>
 
-<div class="card" id="card">
-    <!-- Content will be populated by JS based on date -->
-</div>
+<div class="card" id="card"></div>
 
 <!-- Background Music -->
 <audio id="bgMusic" src="music.mp3" loop></audio>
@@ -132,13 +131,19 @@ footer{
 const card = document.getElementById("card");
 const music = document.getElementById("bgMusic");
 
-// Target date: June 8
-const today = new Date();
-const month = today.getMonth() + 1; // Jan = 0
-const day = today.getDate();
-const targetDate = new Date(today.getFullYear(),5,8); // June = 5
+// ---------- DATE LOGIC ----------
+const now = new Date();
+let year = now.getFullYear();
 
-// Show birthday wishes
+// June 8, 00:00
+let target = new Date(year, 5, 8, 0, 0, 0);
+
+// If June 8 already passed → next year
+if (now >= target) {
+    target = new Date(year + 1, 5, 8, 0, 0, 0);
+}
+
+// ---------- BIRTHDAY CONTENT ----------
 function showWishes(){
     card.innerHTML = `
         <h1>Happy Birthday, Deepika</h1>
@@ -161,49 +166,51 @@ function showWishes(){
 
         <div class="heart">❤️</div>
 
-        <footer>
-            — Always admiring you
-        </footer>
+        <footer>— Always admiring you</footer>
     `;
 
-    // Play music if allowed
-    if(localStorage.getItem("playMusic")==="yes"){
-        music.volume = 0.6;
-        music.play().catch(()=>{});
-    }
+    music.volume = 0.6;
+    music.play().catch(()=>{});
 
-    // Start roses
-    setInterval(createRose,900);
+    setInterval(createRose, 900);
 }
 
-// Show countdown for early visitors
+// ---------- COUNTDOWN CONTENT ----------
 function showCountdown(){
     card.innerHTML = `
         <h1>Almost there!</h1>
-        <p>Deepika's birthday is on June 8th 🎉</p>
-        <div class="countdown" id="countdown"></div>
-        <p>Come back then for a special surprise ❤️</p>
+        <p>Counting down to June 8 🎉</p>
+        <div class="countdown" id="countdown">Loading...</div>
+        <p>A little surprise awaits ❤️</p>
     `;
+
     const countdownEl = document.getElementById("countdown");
 
     function updateCountdown(){
         const now = new Date();
-        let diff = targetDate - now;
-        if(diff<=0){ showWishes(); clearInterval(interval); return; }
+        let diff = Math.floor((target - now) / 1000);
 
-        const days = Math.floor(diff / (1000*60*60*24));
-        const hours = Math.floor((diff%(1000*60*60*24))/(1000*60*60));
-        const minutes = Math.floor((diff%(1000*60*60))/(1000*60));
-        const seconds = Math.floor((diff%(1000*60))/1000);
+        if (diff <= 0) {
+            clearInterval(timer);
+            showWishes();
+            return;
+        }
 
-        countdownEl.innerText = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+        const hours = Math.floor(diff / 3600);
+        const minutes = Math.floor((diff % 3600) / 60);
+        const seconds = diff % 60;
+
+        countdownEl.innerText =
+            String(hours).padStart(2,'0') + " : " +
+            String(minutes).padStart(2,'0') + " : " +
+            String(seconds).padStart(2,'0');
     }
 
     updateCountdown();
-    const interval = setInterval(updateCountdown,1000);
+    const timer = setInterval(updateCountdown, 1000);
 }
 
-// Roses
+// ---------- ROSES ----------
 function createRose(){
     const rose = document.createElement("div");
     rose.className="rose";
@@ -214,13 +221,18 @@ function createRose(){
     setTimeout(()=>rose.remove(),13000);
 }
 
-// Mute button
+// ---------- MUSIC ----------
 function toggleMusic(){
-    if(music.paused){ music.play(); }else{ music.pause(); }
+    if(music.paused){ music.play(); }
+    else{ music.pause(); }
 }
 
-// Decide what to show
-if(month===6 && day===8){ showWishes(); }else{ showCountdown(); }
+// ---------- INITIAL LOAD ----------
+if (now.getMonth() === 5 && now.getDate() === 8) {
+    showWishes();
+} else {
+    showCountdown();
+}
 </script>
 
 </body>
