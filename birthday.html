@@ -126,20 +126,19 @@ footer{
 
 <!-- Background Music -->
 <audio id="bgMusic" src="music.mp3" loop></audio>
-
 <button class="mute" onclick="toggleMusic()">🔇</button>
 
 <script>
 const card = document.getElementById("card");
 const music = document.getElementById("bgMusic");
 
-// Check date
+// Target date: June 8
 const today = new Date();
-const month = today.getMonth() + 1; // January = 0
+const month = today.getMonth() + 1; // Jan = 0
 const day = today.getDate();
-const targetDate = new Date(today.getFullYear(), 5, 8); // June 8th (month = 5)
+const targetDate = new Date(today.getFullYear(),5,8); // June = 5
 
-// Function to show birthday wishes
+// Show birthday wishes
 function showWishes(){
     card.innerHTML = `
         <h1>Happy Birthday, Deepika</h1>
@@ -167,17 +166,17 @@ function showWishes(){
         </footer>
     `;
 
-    // Play music if unlocked
-    if(localStorage.getItem("playMusic") === "yes"){
+    // Play music if allowed
+    if(localStorage.getItem("playMusic")==="yes"){
         music.volume = 0.6;
         music.play().catch(()=>{});
     }
 
     // Start roses
-    setInterval(createRose, 900);
+    setInterval(createRose,900);
 }
 
-// Function to show countdown
+// Show countdown for early visitors
 function showCountdown(){
     card.innerHTML = `
         <h1>Almost there!</h1>
@@ -185,18 +184,12 @@ function showCountdown(){
         <div class="countdown" id="countdown"></div>
         <p>Come back then for a special surprise ❤️</p>
     `;
-
     const countdownEl = document.getElementById("countdown");
 
     function updateCountdown(){
         const now = new Date();
         let diff = targetDate - now;
-
-        if(diff <= 0){
-            showWishes();
-            clearInterval(interval);
-            return;
-        }
+        if(diff<=0){ showWishes(); clearInterval(interval); return; }
 
         const days = Math.floor(diff / (1000*60*60*24));
         const hours = Math.floor((diff%(1000*60*60*24))/(1000*60*60));
@@ -207,35 +200,27 @@ function showCountdown(){
     }
 
     updateCountdown();
-    const interval = setInterval(updateCountdown, 1000);
+    const interval = setInterval(updateCountdown,1000);
 }
 
-// Roses function
+// Roses
 function createRose(){
     const rose = document.createElement("div");
-    rose.className = "rose";
-    rose.textContent = "🌹";
-    rose.style.left = Math.random()*100 + "vw";
-    rose.style.animationDuration = (7+Math.random()*6) + "s";
+    rose.className="rose";
+    rose.textContent="🌹";
+    rose.style.left=Math.random()*100+"vw";
+    rose.style.animationDuration=(7+Math.random()*6)+"s";
     document.body.appendChild(rose);
-    setTimeout(()=>rose.remove(), 13000);
+    setTimeout(()=>rose.remove(),13000);
 }
 
 // Mute button
 function toggleMusic(){
-    if(music.paused){
-        music.play();
-    }else{
-        music.pause();
-    }
+    if(music.paused){ music.play(); }else{ music.pause(); }
 }
 
 // Decide what to show
-if(month === 6 && day === 8){
-    showWishes();
-}else{
-    showCountdown();
-}
+if(month===6 && day===8){ showWishes(); }else{ showCountdown(); }
 </script>
 
 </body>
