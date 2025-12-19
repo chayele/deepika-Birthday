@@ -7,6 +7,10 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Poppins:wght@300;400&display=swap" rel="stylesheet">
 
 <style>
+*{
+    box-sizing:border-box;
+}
+
 body{
     margin:0;
     height:100vh;
@@ -18,29 +22,30 @@ body{
     overflow:hidden;
 }
 
+/* Main Card */
 .card{
-    background:rgba(255,255,255,0.95);
-    padding:55px 60px;
-    border-radius:26px;
+    background:rgba(255,255,255,0.96);
+    padding:56px 62px;
+    border-radius:28px;
     max-width:520px;
     text-align:center;
-    box-shadow:0 25px 45px rgba(0,0,0,0.18);
-    animation:fadeUp 1.5s ease;
+    box-shadow:0 28px 55px rgba(0,0,0,0.18);
+    animation:fadeUp 1.6s ease;
     position:relative;
-    z-index:2;
+    z-index:3;
 }
 
 h1{
     font-family:'Playfair Display',serif;
-    font-size:2.7rem;
+    font-size:2.75rem;
     color:#b23a48;
-    margin-bottom:10px;
+    margin-bottom:8px;
 }
 
 .subtitle{
-    font-size:1rem;
+    font-size:0.95rem;
     color:#777;
-    margin-bottom:30px;
+    margin-bottom:32px;
     letter-spacing:1px;
 }
 
@@ -48,30 +53,32 @@ p{
     font-size:1.05rem;
     line-height:1.9;
     color:#333;
-    margin-bottom:20px;
+    margin-bottom:22px;
 }
 
 .heart{
-    font-size:2.6rem;
-    animation:pulse 1.5s infinite;
+    font-size:2.7rem;
+    animation:pulse 1.6s infinite;
 }
 
 footer{
-    margin-top:30px;
+    margin-top:32px;
     font-size:0.9rem;
     color:#777;
 }
 
+/* Roses */
 .rose{
     position:fixed;
     top:-40px;
     font-size:22px;
     pointer-events:none;
+    opacity:0.75;
     animation:fall linear forwards;
-    opacity:0.8;
     z-index:1;
 }
 
+/* Animations */
 @keyframes fall{
     to{
         transform:translateY(110vh) rotate(360deg);
@@ -80,13 +87,13 @@ footer{
 }
 
 @keyframes fadeUp{
-    from{opacity:0; transform:translateY(30px);}
+    from{opacity:0; transform:translateY(35px);}
     to{opacity:1; transform:translateY(0);}
 }
 
 @keyframes pulse{
     0%{transform:scale(1);}
-    50%{transform:scale(1.1);}
+    50%{transform:scale(1.12);}
     100%{transform:scale(1);}
 }
 </style>
@@ -99,18 +106,18 @@ footer{
     <div class="subtitle">To someone beautifully intentional</div>
 
     <p>
-        You bring elegance, clarity, and meaning  
-        into everything you touch.
+        You have a rare way of bringing clarity, elegance,  
+        and meaning into everything you touch.
     </p>
 
     <p>
         Your standards aren’t about perfection —  
-        they’re about care.
+        they’re about care, intention, and depth.
     </p>
 
     <p>
-        Today, I hope life gives you moments  
-        as thoughtfully crafted as you are.
+        On your birthday, I hope life surprises you  
+        with moments as thoughtfully crafted as you are.
     </p>
 
     <div class="heart">❤️</div>
@@ -120,13 +127,29 @@ footer{
     </footer>
 </div>
 
+<!-- Background Music -->
+<audio id="bgMusic" src="music.mp3" loop></audio>
+
 <script>
+/* 🎵 PLAY MUSIC (after user permission from previous page) */
+window.addEventListener("load", () => {
+    const music = document.getElementById("bgMusic");
+
+    if (localStorage.getItem("playMusic") === "yes") {
+        music.volume = 0.6;
+        music.play().catch(() => {});
+    }
+});
+
+/* 🌹 CREATE SOFT FALLING ROSES */
 function createRose(){
     const rose = document.createElement("div");
     rose.classList.add("rose");
     rose.innerText = "🌹";
+
     rose.style.left = Math.random() * 100 + "vw";
     rose.style.animationDuration = (7 + Math.random() * 6) + "s";
+
     document.body.appendChild(rose);
 
     setTimeout(() => rose.remove(), 13000);
