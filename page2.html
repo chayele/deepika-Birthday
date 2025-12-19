@@ -65,29 +65,18 @@ button{
         This isn’t random.  
         It’s thoughtful — like the way you notice details others miss.
     </p>
-    <button onclick="playAndGo()">Continue</button>
+    <button onclick="goNext()">Continue</button>
 </div>
 
-<audio id="bgMusic" src="music.mp3"></audio>
-
 <script>
-function playAndGo(){
-    const music = document.getElementById("bgMusic");
+function goNext(){
+    // Unlock audio permission
+    localStorage.setItem("playMusic","yes");
 
-    // remember that user allowed music
-    localStorage.setItem("playMusic", "yes");
-
-    music.play().then(() => {
-        setTimeout(() => {
-            window.location.href = "birthday.html";
-        }, 800);
-    }).catch(err => {
-        window.location.href = "birthday.html";
-    });
+    // Navigate to birthday page
+    window.location.href = "birthday.html";
 }
 </script>
 
-
 </body>
 </html>
-
