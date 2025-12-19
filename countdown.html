@@ -1,57 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Happy Birthday Deepika</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Poppins:wght@300;400&display=swap" rel="stylesheet">
+
+<style>
+*{ box-sizing:border-box; }
+
+body{
+    margin:0;
+    height:100vh;
+    background:linear-gradient(135deg,#f8cdda,#fbd3e9);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-family:'Poppins',sans-serif;
+    overflow:hidden;
+}
+
+/* Card */
+.card{
+    background:rgba(255,255,255,0.96);
+    padding:56px 62px;
+    border-radius:28px;
+    max-width:520px;
+    text-align:center;
+    box-shadow:0 28px 55px rgba(0,0,0,0.18);
+    animation:fadeUp 1.6s ease;
+    position:relative;
+    z-index:3;
+}
+
+h1{
+    font-family:'Playfair Display',serif;
+    font-size:2.75rem;
+    color:#b23a48;
+    margin-bottom:8px;
+}
+
+.subtitle{
+    font-size:0.95rem;
+    color:#777;
+    margin-bottom:32px;
+    letter-spacing:1px;
+}
+
+p{
+    font-size:1.05rem;
+    line-height:1.9;
+    color:#333;
+    margin-bottom:22px;
+}
+
+.heart{
+    font-size:2.7rem;
+    animation:pulse 1.6s infinite;
+}
+
+footer{
+    margin-top:32px;
+    font-size:0.9rem;
+    color:#777;
+}
+
+/* Roses */
+.rose{
+    position:fixed;
+    top:-40px;
+    font-size:22px;
+    pointer-events:none;
+    opacity:0.75;
+    animation:fall linear forwards;
+    z-index:1;
+}
+
+/* Animations */
+@keyframes fall{
+    to{
+        transform:translateY(110vh) rotate(360deg);
+        opacity:0;
+    }
+}
+
+@keyframes fadeUp{
+    from{opacity:0; transform:translateY(35px);}
+    to{opacity:1; transform:translateY(0);}
+}
+
+@keyframes pulse{
+    0%{transform:scale(1);}
+    50%{transform:scale(1.12);}
+    100%{transform:scale(1);}
+}
+
+/* Mute button */
+.mute{
+    position:fixed;
+    bottom:20px;
+    right:20px;
+    background:rgba(255,255,255,0.7);
+    border:none;
+    border-radius:50%;
+    padding:10px 14px;
+    font-size:14px;
+    cursor:pointer;
+    z-index:5;
+}
+
+/* Countdown */
+.countdown{
+    font-size:1.3rem;
+    color:#b23a48;
+    margin-top:15px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="card" id="card">
+    <!-- Content will be populated by JS based on date -->
+</div>
+
+<!-- Background Music -->
+<audio id="bgMusic" src="music.mp3" loop></audio>
+<button class="mute" onclick="toggleMusic()">🔇</button>
+
 <script>
-const timerEl = document.getElementById("timer");
-const countdownBox = document.getElementById("countdownBox");
-const wishBox = document.getElementById("wishBox");
-const music = document.getElementById("music");
+const card = document.getElementById("card");
+const music = document.getElementById("bgMusic");
 
-// 🔧 FIXED TARGET DATE LOGIC
-const now = new Date();
-let year = now.getFullYear();
+// Target date: June 8
+const today = new Date();
+const month = today.getMonth() + 1; // Jan = 0
+const day = today.getDate();
+const targetDate = new Date(today.getFullYear(),5,8); // June = 5
 
-// June = 5 (JS months start from 0)
-let target = new Date(year, 5, 8, 0, 0, 0);
-
-// If today is AFTER June 8, use NEXT year
-if (now >= target) {
-  target = new Date(year + 1, 5, 8, 0, 0, 0);
-}
-
-let interval = setInterval(updateTimer, 1000);
-updateTimer();
-
-function updateTimer(){
-  const now = new Date();
-  const diff = target - now;
-
-  if(diff <= 0){
-    showWishes();
-    return;
-  }
-
-  const d = Math.floor(diff / (1000*60*60*24));
-  const h = Math.floor((diff / (1000*60*60)) % 24);
-  const m = Math.floor((diff / (1000*60)) % 60);
-  const s = Math.floor((diff / 1000) % 60);
-
-  timerEl.innerText = `${d}d ${h}h ${m}m ${s}s`;
-}
-
+// Show birthday wishes
 function showWishes(){
-  clearInterval(interval);
-  countdownBox.classList.add("hidden");
-  wishBox.classList.remove("hidden");
-  music.play().catch(()=>{});
-  startRoses();
+    card.innerHTML = `
+        <h1>Happy Birthday, Deepika</h1>
+        <div class="subtitle">To someone beautifully intentional</div>
+
+        <p>
+            You bring elegance, clarity, and meaning  
+            into everything you touch.
+        </p>
+
+        <p>
+            Your standards aren’t about perfection —  
+            they’re about care.
+        </p>
+
+        <p>
+            Today, I hope life gives you moments  
+            as thoughtfully crafted as you are.
+        </p>
+
+        <div class="heart">❤️</div>
+
+        <footer>
+            — Always admiring you
+        </footer>
+    `;
+
+    // Play music if allowed
+    if(localStorage.getItem("playMusic")==="yes"){
+        music.volume = 0.6;
+        music.play().catch(()=>{});
+    }
+
+    // Start roses
+    setInterval(createRose,900);
 }
 
-function startRoses(){
-  for(let i=0;i<30;i++){
-    const r = document.createElement("div");
-    r.className = "rose";
-    r.innerText = "🌹";
-    r.style.left = Math.random()*100 + "vw";
-    r.style.animationDuration = (4 + Math.random()*4) + "s";
-    document.body.appendChild(r);
-  }
+// Show countdown for early visitors
+function showCountdown(){
+    card.innerHTML = `
+        <h1>Almost there!</h1>
+        <p>Deepika's birthday is on June 8th 🎉</p>
+        <div class="countdown" id="countdown"></div>
+        <p>Come back then for a special surprise ❤️</p>
+    `;
+    const countdownEl = document.getElementById("countdown");
+
+    function updateCountdown(){
+        const now = new Date();
+        let diff = targetDate - now;
+        if(diff<=0){ showWishes(); clearInterval(interval); return; }
+
+        const days = Math.floor(diff / (1000*60*60*24));
+        const hours = Math.floor((diff%(1000*60*60*24))/(1000*60*60));
+        const minutes = Math.floor((diff%(1000*60*60))/(1000*60));
+        const seconds = Math.floor((diff%(1000*60))/1000);
+
+        countdownEl.innerText = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+    }
+
+    updateCountdown();
+    const interval = setInterval(updateCountdown,1000);
 }
+
+// Roses
+function createRose(){
+    const rose = document.createElement("div");
+    rose.className="rose";
+    rose.textContent="🌹";
+    rose.style.left=Math.random()*100+"vw";
+    rose.style.animationDuration=(7+Math.random()*6)+"s";
+    document.body.appendChild(rose);
+    setTimeout(()=>rose.remove(),13000);
+}
+
+// Mute button
+function toggleMusic(){
+    if(music.paused){ music.play(); }else{ music.pause(); }
+}
+
+// Decide what to show
+if(month===6 && day===8){ showWishes(); }else{ showCountdown(); }
 </script>
+
+</body>
+</html>
