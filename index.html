@@ -2,66 +2,60 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>For Deepika</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Poppins:wght@300;400&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For You ❤️</title>
 
 <style>
 body{
-    margin:0;
-    height:100vh;
-    background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    font-family:'Poppins',sans-serif;
-    color:white;
+  margin:0;
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:linear-gradient(135deg,#ffd6e8,#ffeaf3);
+  font-family:'Segoe UI',sans-serif;
 }
 
-.container{
-    text-align:center;
-    animation:fadeIn 1.5s ease;
+.box{
+  text-align:center;
+  padding:40px;
+  background:white;
+  border-radius:20px;
+  box-shadow:0 20px 40px rgba(0,0,0,0.2);
+  animation:fadeIn 1.5s ease;
 }
 
 h1{
-    font-family:'Playfair Display',serif;
-    font-size:3rem;
-    margin-bottom:12px;
-}
-
-p{
-    font-size:1.1rem;
-    opacity:0.85;
+  color:#b4005a;
 }
 
 button{
-    margin-top:30px;
-    padding:14px 44px;
-    border:none;
-    border-radius:30px;
-    background:#fbd3e9;
-    color:#333;
-    font-size:1rem;
-    cursor:pointer;
-    transition:0.3s;
-}
-
-button:hover{
-    transform:scale(1.05);
+  margin-top:20px;
+  padding:12px 30px;
+  font-size:16px;
+  border:none;
+  border-radius:25px;
+  background:#ff5fa2;
+  color:white;
+  cursor:pointer;
 }
 
 @keyframes fadeIn{
-    from{opacity:0; transform:translateY(20px);}
-    to{opacity:1; transform:translateY(0);}
+  from{opacity:0; transform:scale(0.9);}
+  to{opacity:1; transform:scale(1);}
 }
 </style>
 </head>
 
 <body>
-<div class="container">
-    <h1>Hi Deepika</h1>
-    <p>This is something made with intention</p>
-    <button onclick="location.href='page2.html'">Begin</button>
+
+<div class="box">
+  <h1>Hi Deepika ❤️</h1>
+  <p>This is something made just for you</p>
+  <a href="page2.html">
+    <button>Continue</button>
+  </a>
 </div>
+
 </body>
 </html>
