@@ -23,27 +23,26 @@ body{
 /* Card */
 .card{
     background:rgba(255,255,255,0.96);
-    padding:56px 62px;
+    padding:56px 60px;
     border-radius:28px;
     max-width:520px;
     text-align:center;
     box-shadow:0 28px 55px rgba(0,0,0,0.18);
-    animation:fadeUp 1.6s ease;
-    position:relative;
+    animation:fadeUp 1.4s ease;
     z-index:3;
 }
 
 h1{
     font-family:'Playfair Display',serif;
-    font-size:2.75rem;
+    font-size:2.6rem;
     color:#b23a48;
-    margin-bottom:8px;
+    margin-bottom:10px;
 }
 
 .subtitle{
     font-size:0.95rem;
     color:#777;
-    margin-bottom:32px;
+    margin-bottom:28px;
     letter-spacing:1px;
 }
 
@@ -55,14 +54,22 @@ p{
 }
 
 .heart{
-    font-size:2.7rem;
-    animation:pulse 1.6s infinite;
+    font-size:2.6rem;
+    animation:pulse 1.5s infinite;
 }
 
 footer{
-    margin-top:32px;
+    margin-top:30px;
     font-size:0.9rem;
     color:#777;
+}
+
+/* Countdown */
+.countdown{
+    font-size:1.6rem;
+    color:#b23a48;
+    margin:20px 0;
+    font-weight:500;
 }
 
 /* Roses */
@@ -74,6 +81,19 @@ footer{
     opacity:0.75;
     animation:fall linear forwards;
     z-index:1;
+}
+
+/* Mute */
+.mute{
+    position:fixed;
+    bottom:20px;
+    right:20px;
+    background:rgba(255,255,255,0.7);
+    border:none;
+    border-radius:50%;
+    padding:10px 14px;
+    cursor:pointer;
+    z-index:5;
 }
 
 /* Animations */
@@ -94,37 +114,13 @@ footer{
     50%{transform:scale(1.12);}
     100%{transform:scale(1);}
 }
-
-/* Mute button */
-.mute{
-    position:fixed;
-    bottom:20px;
-    right:20px;
-    background:rgba(255,255,255,0.7);
-    border:none;
-    border-radius:50%;
-    padding:10px 14px;
-    font-size:14px;
-    cursor:pointer;
-    z-index:5;
-}
-
-/* Countdown */
-.countdown{
-    font-size:1.3rem;
-    color:#b23a48;
-    margin-top:15px;
-}
 </style>
 </head>
 
 <body>
 
-<div class="card" id="card">
-    <!-- Content will be populated by JS based on date -->
-</div>
+<div class="card" id="card"></div>
 
-<!-- Background Music -->
 <audio id="bgMusic" src="music.mp3" loop></audio>
 <button class="mute" onclick="toggleMusic()">🔇</button>
 
@@ -132,21 +128,51 @@ footer{
 const card = document.getElementById("card");
 const music = document.getElementById("bgMusic");
 
-// Target date: June 8
-const today = new Date();
-const month = today.getMonth() + 1; // Jan = 0
-const day = today.getDate();
-const targetDate = new Date(today.getFullYear(),5,8); // June = 5
+/* FIXED DATE LOGIC */
+const now = new Date();
+const birthdayStart = new Date(now.getFullYear(), 5, 8, 0, 0, 0);  // June 8
+const birthdayEnd   = new Date(now.getFullYear(), 5, 8, 23, 59, 59);
 
-// Show birthday wishes
+/* SHOW COUNTDOWN */
+function showCountdown(){
+    card.innerHTML = `
+        <h1>Almost there ✨</h1>
+        <p>Deepika’s birthday is on</p>
+        <div class="countdown" id="timer"></div>
+        <p>Come back for something special ❤️</p>
+    `;
+
+    const timer = document.getElementById("timer");
+
+    function update(){
+        const diff = birthdayStart - new Date();
+        if(diff <= 0){
+            showWishes();
+            clearInterval(intv);
+            return;
+        }
+
+        const d = Math.floor(diff / (1000*60*60*24));
+        const h = Math.floor((diff / (1000*60*60)) % 24);
+        const m = Math.floor((diff / (1000*60)) % 60);
+        const s = Math.floor((diff / 1000) % 60);
+
+        timer.innerText = `${d}d ${h}h ${m}m ${s}s`;
+    }
+
+    update();
+    const intv = setInterval(update, 1000);
+}
+
+/* SHOW WISHES */
 function showWishes(){
     card.innerHTML = `
         <h1>Happy Birthday, Deepika</h1>
-        <div class="subtitle">To someone beautifully intentional</div>
+        <div class="subtitle">June 8 — beautifully intentional</div>
 
         <p>
-            You bring elegance, clarity, and meaning  
-            into everything you touch.
+            You bring elegance, clarity,  
+            and purpose into everything you do.
         </p>
 
         <p>
@@ -155,73 +181,13 @@ function showWishes(){
         </p>
 
         <p>
-            Today, I hope life gives you moments  
-            as thoughtfully crafted as you are.
+            Today, I hope the world  
+            gives back the thoughtfulness you offer.
         </p>
 
         <div class="heart">❤️</div>
 
-        <footer>
-            — Always admiring you
-        </footer>
+        <footer>— Always admiring you</footer>
     `;
 
-    // Play music if allowed
-    if(localStorage.getItem("playMusic")==="yes"){
-        music.volume = 0.6;
-        music.play().catch(()=>{});
-    }
-
-    // Start roses
-    setInterval(createRose,900);
-}
-
-// Show countdown for early visitors
-function showCountdown(){
-    card.innerHTML = `
-        <h1>Almost there!</h1>
-        <p>Deepika's birthday is on June 8th 🎉</p>
-        <div class="countdown" id="countdown"></div>
-        <p>Come back then for a special surprise ❤️</p>
-    `;
-    const countdownEl = document.getElementById("countdown");
-
-    function updateCountdown(){
-        const now = new Date();
-        let diff = targetDate - now;
-        if(diff<=0){ showWishes(); clearInterval(interval); return; }
-
-        const days = Math.floor(diff / (1000*60*60*24));
-        const hours = Math.floor((diff%(1000*60*60*24))/(1000*60*60));
-        const minutes = Math.floor((diff%(1000*60*60))/(1000*60));
-        const seconds = Math.floor((diff%(1000*60))/1000);
-
-        countdownEl.innerText = `${days}d ${hours}h ${minutes}m ${seconds}s`;
-    }
-
-    updateCountdown();
-    const interval = setInterval(updateCountdown,1000);
-}
-
-// Roses
-function createRose(){
-    const rose = document.createElement("div");
-    rose.className="rose";
-    rose.textContent="🌹";
-    rose.style.left=Math.random()*100+"vw";
-    rose.style.animationDuration=(7+Math.random()*6)+"s";
-    document.body.appendChild(rose);
-    setTimeout(()=>rose.remove(),13000);
-}
-
-// Mute button
-function toggleMusic(){
-    if(music.paused){ music.play(); }else{ music.pause(); }
-}
-
-// Decide what to show
-if(month===6 && day===8){ showWishes(); }else{ showCountdown(); }
-</script>
-
-</body>
-</html>
+    if(localStorage.getItem("playMusic"
