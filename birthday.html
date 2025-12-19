@@ -20,9 +20,8 @@ body{
     overflow:hidden;
 }
 
-/* Card */
 .card{
-    background:rgba(255,255,255,0.96);
+    background:rgba(255,255,255,0.97);
     padding:56px 60px;
     border-radius:28px;
     max-width:520px;
@@ -43,7 +42,6 @@ h1{
     font-size:0.95rem;
     color:#777;
     margin-bottom:28px;
-    letter-spacing:1px;
 }
 
 p{
@@ -51,6 +49,13 @@ p{
     line-height:1.9;
     color:#333;
     margin-bottom:22px;
+}
+
+.countdown{
+    font-size:1.8rem;
+    color:#b23a48;
+    font-weight:600;
+    letter-spacing:1px;
 }
 
 .heart{
@@ -64,15 +69,6 @@ footer{
     color:#777;
 }
 
-/* Countdown */
-.countdown{
-    font-size:1.6rem;
-    color:#b23a48;
-    margin:20px 0;
-    font-weight:500;
-}
-
-/* Roses */
 .rose{
     position:fixed;
     top:-40px;
@@ -80,10 +76,8 @@ footer{
     pointer-events:none;
     opacity:0.75;
     animation:fall linear forwards;
-    z-index:1;
 }
 
-/* Mute */
 .mute{
     position:fixed;
     bottom:20px;
@@ -93,22 +87,15 @@ footer{
     border-radius:50%;
     padding:10px 14px;
     cursor:pointer;
-    z-index:5;
 }
 
-/* Animations */
 @keyframes fall{
-    to{
-        transform:translateY(110vh) rotate(360deg);
-        opacity:0;
-    }
+    to{ transform:translateY(110vh) rotate(360deg); opacity:0; }
 }
-
 @keyframes fadeUp{
-    from{opacity:0; transform:translateY(35px);}
+    from{opacity:0; transform:translateY(30px);}
     to{opacity:1; transform:translateY(0);}
 }
-
 @keyframes pulse{
     0%{transform:scale(1);}
     50%{transform:scale(1.12);}
@@ -125,69 +112,99 @@ footer{
 <button class="mute" onclick="toggleMusic()">🔇</button>
 
 <script>
+/* =========================
+   CONFIG
+========================= */
+const TEST_MODE = true; // 🔥 SET TO false ON FINAL DAY
+
 const card = document.getElementById("card");
 const music = document.getElementById("bgMusic");
 
-/* FIXED DATE LOGIC */
+/* TARGET DATE */
 const now = new Date();
-const birthdayStart = new Date(now.getFullYear(), 5, 8, 0, 0, 0);  // June 8
-const birthdayEnd   = new Date(now.getFullYear(), 5, 8, 23, 59, 59);
+let birthdayStart;
 
-/* SHOW COUNTDOWN */
+if(TEST_MODE){
+    // countdown to 1 hour from now (for testing)
+    birthdayStart = new Date(now.getTime() + 60 * 60 * 1000);
+}else{
+    birthdayStart = new Date(now.getFullYear(), 5, 8, 0, 0, 0);
+}
+
+/* COUNTDOWN */
 function showCountdown(){
     card.innerHTML = `
         <h1>Almost there ✨</h1>
-        <p>Deepika’s birthday is on</p>
-        <div class="countdown" id="timer"></div>
-        <p>Come back for something special ❤️</p>
+        <p>Something special is coming</p>
+        <div class="countdown" id="timer">Loading...</div>
+        <p>Stay right here ❤️</p>
     `;
 
     const timer = document.getElementById("timer");
 
-    function update(){
+    const interval = setInterval(() => {
         const diff = birthdayStart - new Date();
+
         if(diff <= 0){
+            clearInterval(interval);
             showWishes();
-            clearInterval(intv);
             return;
         }
 
-        const d = Math.floor(diff / (1000*60*60*24));
-        const h = Math.floor((diff / (1000*60*60)) % 24);
+        const h = Math.floor(diff / (1000*60*60));
         const m = Math.floor((diff / (1000*60)) % 60);
         const s = Math.floor((diff / 1000) % 60);
 
-        timer.innerText = `${d}d ${h}h ${m}m ${s}s`;
-    }
-
-    update();
-    const intv = setInterval(update, 1000);
+        timer.textContent = `${h}h ${m}m ${s}s`;
+    }, 1000);
 }
 
-/* SHOW WISHES */
+/* WISHES */
 function showWishes(){
     card.innerHTML = `
         <h1>Happy Birthday, Deepika</h1>
-        <div class="subtitle">June 8 — beautifully intentional</div>
+        <div class="subtitle">June 8 — perfectly you</div>
 
-        <p>
-            You bring elegance, clarity,  
-            and purpose into everything you do.
-        </p>
+        <p>You bring clarity, elegance, and intention<br>
+        into everything you touch.</p>
 
-        <p>
-            Your standards aren’t about perfection —  
-            they’re about care.
-        </p>
+        <p>Your standards aren’t about perfection —<br>
+        they’re about care.</p>
 
-        <p>
-            Today, I hope the world  
-            gives back the thoughtfulness you offer.
-        </p>
+        <p>Today, may the world return<br>
+        the thoughtfulness you give.</p>
 
         <div class="heart">❤️</div>
-
         <footer>— Always admiring you</footer>
     `;
 
-    if(localStorage.getItem("playMusic"
+    if(localStorage.getItem("playMusic")==="yes"){
+        music.volume = 0.6;
+        music.play().catch(()=>{});
+    }
+
+    setInterval(createRose, 900);
+}
+
+/* ROSES */
+function createRose(){
+    const r = document.createElement("div");
+    r.className = "rose";
+    r.textContent = "🌹";
+    r.style.left = Math.random()*100 + "vw";
+    r.style.animationDuration = (7 + Math.random()*6) + "s";
+    document.body.appendChild(r);
+    setTimeout(()=>r.remove(),13000);
+}
+
+/* MUSIC */
+function toggleMusic(){
+    music.paused ? music.play() : music.pause();
+}
+
+/* START */
+showCountdown();
+</script>
+
+</body>
+</html>
