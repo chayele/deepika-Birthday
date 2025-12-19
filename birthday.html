@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Happy Birthday Deepika</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Poppins:wght@300;400&display=swap" rel="stylesheet">
+
+<style>
+body{
+    margin:0;
+    height:100vh;
+    background:linear-gradient(135deg,#f8cdda,#fbd3e9);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-family:'Poppins',sans-serif;
+    overflow:hidden;
+}
+
+.card{
+    background:rgba(255,255,255,0.95);
+    padding:55px 60px;
+    border-radius:26px;
+    max-width:520px;
+    text-align:center;
+    box-shadow:0 25px 45px rgba(0,0,0,0.18);
+    animation:fadeUp 1.5s ease;
+    position:relative;
+    z-index:2;
+}
+
+h1{
+    font-family:'Playfair Display',serif;
+    font-size:2.7rem;
+    color:#b23a48;
+    margin-bottom:10px;
+}
+
+.subtitle{
+    font-size:1rem;
+    color:#777;
+    margin-bottom:30px;
+    letter-spacing:1px;
+}
+
+p{
+    font-size:1.05rem;
+    line-height:1.9;
+    color:#333;
+    margin-bottom:20px;
+}
+
+.heart{
+    font-size:2.6rem;
+    animation:pulse 1.5s infinite;
+}
+
+footer{
+    margin-top:30px;
+    font-size:0.9rem;
+    color:#777;
+}
+
+.rose{
+    position:fixed;
+    top:-40px;
+    font-size:22px;
+    pointer-events:none;
+    animation:fall linear forwards;
+    opacity:0.8;
+    z-index:1;
+}
+
+@keyframes fall{
+    to{
+        transform:translateY(110vh) rotate(360deg);
+        opacity:0;
+    }
+}
+
+@keyframes fadeUp{
+    from{opacity:0; transform:translateY(30px);}
+    to{opacity:1; transform:translateY(0);}
+}
+
+@keyframes pulse{
+    0%{transform:scale(1);}
+    50%{transform:scale(1.1);}
+    100%{transform:scale(1);}
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+    <h1>Happy Birthday, Deepika</h1>
+    <div class="subtitle">To someone beautifully intentional</div>
+
+    <p>
+        You bring elegance, clarity, and meaning  
+        into everything you touch.
+    </p>
+
+    <p>
+        Your standards aren’t about perfection —  
+        they’re about care.
+    </p>
+
+    <p>
+        Today, I hope life gives you moments  
+        as thoughtfully crafted as you are.
+    </p>
+
+    <div class="heart">❤️</div>
+
+    <footer>
+        — Always admiring you
+    </footer>
+</div>
+
+<script>
+function createRose(){
+    const rose = document.createElement("div");
+    rose.classList.add("rose");
+    rose.innerText = "🌹";
+    rose.style.left = Math.random() * 100 + "vw";
+    rose.style.animationDuration = (7 + Math.random() * 6) + "s";
+    document.body.appendChild(rose);
+
+    setTimeout(() => rose.remove(), 13000);
+}
+
+setInterval(createRose, 900);
+</script>
+
+</body>
+</html>

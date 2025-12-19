@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Just a Moment</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Poppins:wght@300;400&display=swap" rel="stylesheet">
+
+<style>
+body{
+    margin:0;
+    height:100vh;
+    background:linear-gradient(135deg,#fbd3e9,#f8cdda);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-family:'Poppins',sans-serif;
+}
+
+.card{
+    background:white;
+    padding:50px;
+    border-radius:24px;
+    max-width:480px;
+    text-align:center;
+    box-shadow:0 20px 40px rgba(0,0,0,0.15);
+    animation:fadeUp 1.4s ease;
+}
+
+h2{
+    font-family:'Playfair Display',serif;
+    color:#b23a48;
+    margin-bottom:20px;
+}
+
+p{
+    font-size:1.05rem;
+    color:#333;
+    line-height:1.8;
+}
+
+button{
+    margin-top:30px;
+    padding:14px 38px;
+    border:none;
+    border-radius:30px;
+    background:#b23a48;
+    color:white;
+    font-size:1rem;
+    cursor:pointer;
+}
+
+@keyframes fadeUp{
+    from{opacity:0; transform:translateY(30px);}
+    to{opacity:1; transform:translateY(0);}
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+    <h2>Before you continue…</h2>
+    <p>
+        This isn’t random.  
+        It’s thoughtful — like the way you notice details others miss.
+    </p>
+    <button onclick="playAndGo()">Continue</button>
+</div>
+
+<audio id="bgMusic" src="music.mp3"></audio>
+
+<script>
+function playAndGo(){
+    const music = document.getElementById("bgMusic");
+    music.play();
+    setTimeout(() => {
+        window.location.href = "birthday.html";
+    }, 800);
+}
+</script>
+
+</body>
+</html>
